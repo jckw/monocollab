@@ -82,7 +82,7 @@ const Editor: React.FC<{ path?: string; id?: string }> = ({ id }) => {
             <div
                 css={{
                     display: "flex",
-                    height: "100%",
+                    flex: 1,
                     justifyContent: "center",
                     alignItems: "center",
                     fontFamily: "'Roboto Mono', monospace"
@@ -119,8 +119,7 @@ const Editor: React.FC<{ path?: string; id?: string }> = ({ id }) => {
             spellCheck={false}
             css={{
                 boxSizing: "border-box",
-                width: "100%",
-                height: "100%",
+                flex: 1,
                 resize: "none",
                 padding: 16,
                 fontSize: "1em",

@@ -1,9 +1,22 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core"
-import { Router } from "@reach/router"
+import { useEffect, useState } from "react"
+import { Router, globalHistory } from "@reach/router"
 import Editor from "./Editor"
 
 const App: React.FC = () => {
+    const [url, setUrl] = useState(window.location.toString())
+
+    useEffect(() => {
+        const removeListener = globalHistory.listen(params => {
+            const { location } = params
+            setUrl(location.href)
+        })
+        return () => {
+            removeListener()
+        }
+    }, [])
+
     return (
         <div
             css={{
@@ -14,19 +27,31 @@ const App: React.FC = () => {
             }}
         >
             <input
-                disabled
                 css={{
                     fontSize: "0.8em",
-                    color: "#949494",
                     padding: "16px 16px 0",
                     fontFamily: "'Roboto Mono', monospace",
                     border: "none",
                     boxShadow: "none",
-                    margin: 0
+                    margin: 0,
+                    textShadow: "0 0 0 #949494",
+                    color: "transparent",
+                    "&:focus": {
+                        outline: "none"
+                    }
                 }}
-                value={window.location.toString()}
+                onChange={() => false}
+                onFocus={e => e.target.select()}
+                value={url}
             />
-            <Router css={{ flexGrow: 1, position: "relative" }}>
+            <Router
+                css={{
+                    flexGrow: 1,
+                    display: "flex",
+                    alignItems: "stretch",
+                    flexDirection: "column"
+                }}
+            >
                 <Editor path="/" />
                 <Editor path="/:id" />
             </Router>
