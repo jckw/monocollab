@@ -1,5 +1,16 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# TODO:
+- [ ] Make fontsize variable on mobile
+- [ ] Show whether online
+- [ ] Show other users online
+- [ ] Create new URL and doc if no slug used
+- [ ] Disable spellcheck
+- [ ] Probably remove non-zoom thing on mobile (iOS doesn't obey it anyway)
+- [ ] Automatically place cursor in the right position after changes 
+- [ ] Decide on a way to keep the number of firestore connections down (maybe after sheets have no users, set them to readonly and wait for someone to click "edit" (or just start editing...?) before watching the file for changes)
+
+
 ## Available Scripts
 
 In the project directory, you can run:
