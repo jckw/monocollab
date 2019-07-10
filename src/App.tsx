@@ -5,7 +5,14 @@ import Editor from "./Editor"
 
 const App: React.FC = () => {
     return (
-        <div css={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div
+            css={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                alignItems: "stretch"
+            }}
+        >
             <input
                 disabled
                 css={{

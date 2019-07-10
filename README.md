@@ -1,6 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 # TODO:
+- [ ] **Use window.location hook to correctly update the URL.**
 - [ ] Make fontsize variable on mobile
 - [ ] Show whether online
 - [ ] Show other users online

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core"
-import React, { useState, SyntheticEvent, useEffect } from "react"
+import React, { useState, SyntheticEvent, useEffect, useRef } from "react"
 import firebase from "./firebase"
 import { navigate } from "@reach/router"
 
@@ -10,8 +10,9 @@ const Editor: React.FC<{ path?: string; id?: string }> = ({ id }) => {
     const [loading, setLoading] = useState(true)
     const [docRef, setDocRef] = useState()
     const [value, setValue] = useState("")
-    // const [selectionStart, setSelectionStart] = useState()
-    // const [selectionEnd, setSelectionEnd] = useState()
+    const [selectionStart, setSelectionStart] = useState()
+    const [selectionEnd, setSelectionEnd] = useState()
+    const textArea = useRef<HTMLTextAreaElement>(null)
 
     useEffect(() => {
         async function createDocument() {
@@ -59,20 +60,21 @@ const Editor: React.FC<{ path?: string; id?: string }> = ({ id }) => {
         })
     }
 
-    // function checkSelectionRange(e: SyntheticEvent<HTMLTextAreaElement>) {
-    //     setSelectionStart(e.currentTarget.selectionStart)
-    //     setSelectionEnd(e.currentTarget.selectionEnd)
-    // }
+    function checkSelectionRange(e: SyntheticEvent<HTMLTextAreaElement>) {
+        setSelectionStart(e.currentTarget.selectionStart)
+        setSelectionEnd(e.currentTarget.selectionEnd)
+    }
 
     function onChange(e: SyntheticEvent<HTMLTextAreaElement>) {
         const v = e.currentTarget.value
         setValue(v)
         writeChanges(v)
-        // checkSelectionRange(e)
+        console.log("uhhhh")
+        checkSelectionRange(e)
     }
 
     function onClick(e: SyntheticEvent<HTMLTextAreaElement>) {
-        // checkSelectionRange(e)
+        checkSelectionRange(e)
     }
 
     if (loading) {
@@ -91,16 +93,34 @@ const Editor: React.FC<{ path?: string; id?: string }> = ({ id }) => {
         )
     }
 
+    function onKeyDown(e: React.KeyboardEvent) {
+        if (e.keyCode === 9 && textArea && textArea.current) {
+            e.preventDefault()
+
+            const newValue =
+                value.substr(0, selectionStart) +
+                "    " +
+                value.substr(selectionEnd)
+            setValue(newValue)
+
+            const pos = selectionStart + 4
+
+            textArea.current.selectionStart = pos
+            textArea.current.selectionEnd = pos
+
+            setSelectionStart(pos)
+            setSelectionEnd(pos)
+        }
+    }
+
     return (
         <textarea
+            ref={textArea}
             spellCheck={false}
             css={{
                 boxSizing: "border-box",
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
+                width: "100%",
+                height: "100%",
                 resize: "none",
                 padding: 16,
                 fontSize: "1em",
@@ -117,6 +137,7 @@ const Editor: React.FC<{ path?: string; id?: string }> = ({ id }) => {
             value={value}
             onChange={onChange}
             onClick={onClick}
+            onKeyDown={onKeyDown}
         />
     )
 }
